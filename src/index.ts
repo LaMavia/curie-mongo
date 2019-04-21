@@ -1,4 +1,4 @@
-import mongo, { UpdateManyOptions } from 'mongodb'
+import mongo, { UpdateManyOptions, FilterQuery, Condition } from 'mongodb'
 import Currie, {
   DBridge,
   initLogger,
@@ -11,13 +11,15 @@ import {
   ConditionQuery,
   HighConditionQuery
 } from 'querifier/dist/src/dictionaries/condition.dict'
+import { natifyUpdate } from 'querifier/dist/src/helpers/nativfy'
 
-interface MongoBaseClass<T> {
-  // @ts-ignore
-  [key: keyof T]: any
+interface Update<T> {
+  collection: string
+  filter: FilterQuery<T>
+  query: UpdateQuery
 }
 
-export class MongoDBridge extends DBridge<mongo.Db, HighConditionQuery> {
+export class MongoDBridge extends DBridge<mongo.Db, any> {
   cache: Map<
     string,
     {
@@ -96,8 +98,27 @@ export class MongoDBridge extends DBridge<mongo.Db, HighConditionQuery> {
       for (const k in inst) {
         ob[k] = inst[k]
       }
-      
+
       return col.insertOne(data)
     }
+  }
+
+  update<T>({
+    filter,
+    query,
+    collection
+  }: Update<T>): Promise<mongo.UpdateWriteOpResult> {
+    const q = natifyUpdate(query)
+    return this.db.collection(collection).updateMany(filter, q)
+  }
+
+  delete<T>(query: {[collection: string]: mongo.FilterQuery<T>}) {
+    const ps = [] as Promise<mongo.DeleteWriteOpResultObject>[]
+    for(const col in query) {
+      const q = query[col]
+      ps.push(this.db.collection(col).deleteMany(q))
+    }
+
+    return Promise.all(ps)
   }
 }
