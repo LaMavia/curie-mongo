@@ -1,0 +1,42 @@
+{
+  "name": "curie-mongo",
+  "version": "0.0.1",
+  "description": "A Mongodb driver for the curie-server Node.js framework",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts --exit"
+  },
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LastShadowPL/curie-mongo.git",
+    "db": "mongod --dbpath C:\\Users\\xelox\\MongoDB\\data\\db\""
+  },
+  "keywords": [
+    "curie",
+    "server",
+    "curie-server",
+    "mongo",
+    "mongodb",
+    "driver",
+    "db"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LastShadowPL/curie-mongo/issues"
+  },
+  "homepage": "https://github.com/LastShadowPL/curie-mongo#readme",
+  "dependencies": {
+    "curie-server": "^2.4.3",
+    "mongodb": "^3.2.3",
+    "querifier": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "@types/mongodb": "^3.1.24",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  }
+}
